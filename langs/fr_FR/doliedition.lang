@@ -1,0 +1,14 @@
+doliEditionModuleDescription=Gestion d'objets par éditions/saisons dans Dolibarr
+doliEditionManage=Gestion des éditions
+doliEditionManageDesc=Gestion des éditions liées à votre entité
+doliEditionNumberShort=N°
+doliEditionE=Édition
+doliEditionCurrent=Édition courante
+doliEditionList=Liste des éditions
+doliEditionNeeded=Une édition active est nécessaire au module pour fonctionner
+doliEditionDeleteConfirm=Êtes-vous sûr(e) de vouloir supprimer l'édition %s ?
+doliEditionDateReversed=La date de début ne peut être supérieure à la date de fin
+doliEditionAddSuccess=Édition ajoutée
+doliEditionCurrentUpdated=L'édition courante a été mise à jour
+doliEditionSetCurrentConfirm=Rendre courante l'édition %s ?
+doliEditionAdd=Ajouter une édition
