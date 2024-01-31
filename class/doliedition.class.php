@@ -1,6 +1,8 @@
 <?php
+/* Copyright (C) 2023-2024  Anthony Damhet          <contact@progiseize.fr>*/
 
-class DoliEdition {
+class DoliEdition
+{
 
     public $id;
     public $edition;
@@ -18,17 +20,25 @@ class DoliEdition {
     public $db;
     public $table_editions = 'doliedition';
 
-    public function __construct($db){$this->db = $db;}
+    public function __construct($db)
+    {
+        $this->db = $db;
+    }
 
     //
-    public function create($user){
+    public function create($user)
+    {
 
         global $conf;
         
-        if(!$this->numero): return false; endif;
-        if(!$this->edition): return false; endif;
-        if(!$this->date_debut): return false; endif;
-        if(!$this->date_fin): return false; endif;
+        if(!$this->numero) : return false; 
+        endif;
+        if(!$this->edition) : return false; 
+        endif;
+        if(!$this->date_debut) : return false; 
+        endif;
+        if(!$this->date_fin) : return false; 
+        endif;
 
         $this->db->begin();
 
@@ -45,7 +55,7 @@ class DoliEdition {
         $sql.= " )";
         $res = $this->db->query($sql);
 
-        if($res): 
+        if($res) : 
             $insert_id = $this->db->last_insert_id(MAIN_DB_PREFIX.$this->table_editions);
             $this->db->commit(); return $insert_id;
         else: $this->db->rollback(); return false;
@@ -53,7 +63,8 @@ class DoliEdition {
     }
 
     //
-    public function fetch($id){
+    public function fetch($id)
+    {
 
         $sql = "SELECT * FROM ".MAIN_DB_PREFIX.$this->table_editions;
         $sql .= " WHERE rowid = '".$id."'";
@@ -61,7 +72,7 @@ class DoliEdition {
         $result = $this->db->query($sql);
         $obj = $this->db->fetch_object($result);
 
-        if($result->num_rows == 0): return -1;
+        if($result->num_rows == 0) : return -1;
         else:
 
             $this->id = $obj->rowid;
@@ -77,10 +88,11 @@ class DoliEdition {
             $interval = DateInterval::createFromDateString('1 day');
 
             // DatePeriod
-            $this->date_range = new DatePeriod($this->date_debut, $interval ,$this->date_fin);
+            $this->date_range = new DatePeriod($this->date_debut, $interval, $this->date_fin);
 
             // ARRAY DATE_US => DATE_FR
-            foreach($this->date_range as $d): $this->date_array[$d->format('Y-m-d')] = $d->format('d/m/Y'); endforeach;
+            foreach($this->date_range as $d): $this->date_array[$d->format('Y-m-d')] = $d->format('d/m/Y'); 
+            endforeach;
 
             // NUMERO SEMAINE
             $this->weeknumber = $this->date_debut->format('W');
@@ -91,14 +103,16 @@ class DoliEdition {
     }
 
     //
-    public function refresh(){
+    public function refresh()
+    {
 
         $this->fetch($this->id);
         return $this->id;
-
     }
 
-    public function fetchByYear($edition){
+    //
+    public function fetchByYear($edition)
+    {
 
         global $conf;
 
@@ -106,16 +120,18 @@ class DoliEdition {
         $sql.= " WHERE entity = '".$conf->entity."' AND edition = '".$edition."'";
         $res = $this->db->query($sql);
 
-        if(!$res): return -1; endif;
-        if($res->num_rows == 0): return 0; endif;
+        if(!$res) : return -1; 
+        endif;
+        if($res->num_rows == 0) : return 0; 
+        endif;
 
         $obj = $this->db->fetch_object($res);
         return $this->fetch($obj->rowid);
-
     }
 
     //
-    public function fetch_all(){
+    public function fetch_all()
+    {
 
         global $conf;
 
@@ -126,7 +142,7 @@ class DoliEdition {
 
         $list_editions = array();
 
-        if($result):
+        if($result) :
             while($obj = $this->db->fetch_object($result)):
                 $edition = new self($this->db);
                 $edition->fetch($obj->rowid);
@@ -139,19 +155,24 @@ class DoliEdition {
     }
 
     //
-    public function delete_edition($edition_id,$user):int{
+    public function delete_edition($edition_id,$user):int
+    {
 
-        if(!$user->rights->doliedition->edition->delete): return -1; endif;
+        if(!$user->rights->doliedition->edition->delete) : return -1; 
+        endif;
         $sql = "DELETE FROM ".MAIN_DB_PREFIX.$this->table_editions;
         $sql.= " WHERE rowid = '".$this->db->escape($edition_id)."'";
         $res = $this->db->query($sql);
-        if(!$res): return -2; endif;
+        if(!$res) : return -2; 
+        endif;
         return 1;
     }
 
-    public function update($user):int{
+    public function update($user):int
+    {
 
-        if(!$user->rights->doliedition->edition->write): return -1; endif;
+        if(!$user->rights->doliedition->edition->write) : return -1; 
+        endif;
 
         $sql = "UPDATE ".MAIN_DB_PREFIX.$this->table_editions;
         $sql.= " SET numero = '".$this->db->escape($this->numero)."'";
@@ -162,30 +183,32 @@ class DoliEdition {
         $sql.= " WHERE rowid = '".$this->id."'";
         $res = $this->db->query($sql);
 
-        if(!$res): return -2; endif;
+        if(!$res) : return -2; 
+        endif;
         return 1;
     }
 
     //
-    public function getCurrentEdition($mode = 'object'){
+    public function getCurrentEdition($mode = 'object')
+    {
 
         global $conf;
 
-        if($mode == 'object'): 
+        if($mode == 'object') : 
             $sql = "SELECT rowid FROM ".MAIN_DB_PREFIX.$this->table_editions;
             $sql .= " WHERE current = '1' AND entity = '".$conf->entity."'";
 
             $result = $this->db->query($sql);
             $obj = $this->db->fetch_object($result);
 
-            if($result->num_rows == 0): return -1;
+            if($result->num_rows == 0) : return -1;
             else:
                 $next_edition = new Self($this->db);
                 $next_edition->fetch($obj->rowid);
                 return $next_edition;
             endif;
             
-        elseif($mode == 'year'): 
+        elseif($mode == 'year') : 
 
             $sql = "SELECT edition FROM ".MAIN_DB_PREFIX.$this->table_editions;
             $sql .= " WHERE current = '1' AND entity = '".$conf->entity."'";
@@ -193,7 +216,7 @@ class DoliEdition {
             $result = $this->db->query($sql);
             $obj = $this->db->fetch_object($result);
 
-            if($result->num_rows == 0): return -1;
+            if($result->num_rows == 0) : return -1;
             else: return $obj->edition;
             endif;
             
@@ -201,7 +224,8 @@ class DoliEdition {
     }
 
     //
-    public function getEditionsActive($mode = 'object'){
+    public function getEditionsActive($mode = 'object')
+    {
 
         global $conf;
 
@@ -212,12 +236,12 @@ class DoliEdition {
 
         $list_editions = array();
 
-        if($result):
+        if($result) :
             while($obj = $this->db->fetch_object($result)):
                 $edition = new self($this->db);
                 $edition->fetch($obj->rowid);
-                if($mode == 'object'): $list_editions[$obj->rowid] = $edition;
-                elseif($mode == 'array'): array_push($list_editions,$edition->edition);
+                if($mode == 'object') : $list_editions[$obj->rowid] = $edition;
+                elseif($mode == 'array') : array_push($list_editions, $edition->edition);
                 endif;
             endwhile;           
         else: dol_print_error($edition->db); 
@@ -227,7 +251,8 @@ class DoliEdition {
     }
 
     //
-    public function getXLast($limit = 3,$sortorder = 'DESC'){
+    public function getXLast($limit = 3,$sortorder = 'DESC')
+    {
 
         global $conf;
 
@@ -238,16 +263,18 @@ class DoliEdition {
 
         $list_editions = array();
 
-        if($result):
+        if($result) :
             while($obj = $this->db->fetch_object($result)):
-                array_push($list_editions,$obj->edition);
+                array_push($list_editions, $obj->edition);
             endwhile;           
         else: dol_print_error($edition->db); 
         endif;
 
         switch ($sortorder):
-            case 'ASC': asort($list_editions); break;            
-            case 'DESC': default: arsort($list_editions); break;            
+        case 'ASC': asort($list_editions); 
+            break;            
+        case 'DESC': default: arsort($list_editions); 
+            break;            
         endswitch;
         
 
@@ -255,35 +282,45 @@ class DoliEdition {
     }
 
     //
-    public function setActive(){
+    public function setActive()
+    {
 
-        if(!$this->id): return false; endif;
+        if(!$this->id) : return false; 
+        endif;
 
         $sql = "UPDATE ".MAIN_DB_PREFIX.$this->table_editions;
         $sql.= " SET active = '1' WHERE rowid = '".$this->id."'";
         $result = $this->db->query($sql);
 
-        if(!$result): return false; endif;
+        if(!$result) : return false; 
+        endif;
         return true;
     }
 
-    public function setInactive(){
+    //
+    public function setInactive()
+    {
 
-        if(!$this->id): return false; endif;
+        if(!$this->id) : return false; 
+        endif;
 
         $sql = "UPDATE ".MAIN_DB_PREFIX.$this->table_editions;
         $sql.= " SET active = '0' WHERE rowid = '".$this->id."'";
         $result = $this->db->query($sql);
 
-        if(!$result): return false; endif;
+        if(!$result) : return false; 
+        endif;
         return true;
     }
 
-    public function setCurrent(){
+    //
+    public function setCurrent()
+    {
 
         global $conf;
 
-        if(!$this->id): return false; endif;
+        if(!$this->id) : return false; 
+        endif;
 
         $this->db->begin();
 
@@ -292,14 +329,16 @@ class DoliEdition {
         $sql_remove_current.= " WHERE entity = '".$conf->entity."' AND current = '1'";
 
         $res_remove_current = $this->db->query($sql_remove_current);
-        if(!$res_remove_current): $this->db->rollback(); return false; endif;
+        if(!$res_remove_current) : $this->db->rollback(); return false; 
+        endif;
 
         $sql_set_current = "UPDATE ".MAIN_DB_PREFIX.$this->table_editions;
         $sql_set_current.= " SET current = '1'";
         $sql_set_current.= " WHERE rowid = '".$this->id."'";
 
         $res_set_current = $this->db->query($sql_set_current);
-        if(!$res_set_current): $this->db->rollback(); return false; endif;
+        if(!$res_set_current) : $this->db->rollback(); return false; 
+        endif;
 
         $this->db->commit();
         return true;

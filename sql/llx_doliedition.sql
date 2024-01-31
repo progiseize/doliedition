@@ -1,4 +1,4 @@
--- Copyright (C) 2023 PROGISEIZE <contact@progiseize.fr>
+-- Copyright (C) 2023-2024 Anthony Damhet <contact@progiseize.fr>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by

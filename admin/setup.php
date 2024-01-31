@@ -1,18 +1,22 @@
 <?php
-/* 
- * Copyright (C) 2021 Anthony Damhet - Progiseize <a.damhet@progiseize.fr>
+/* Copyright (C) 2023-2024 	Anthony Damhet			<contact@progiseize.fr>
 */
 
 $res=0;
-if (! $res && file_exists("../main.inc.php")): $res=@include '../main.inc.php'; endif;
-if (! $res && file_exists("../../main.inc.php")): $res=@include '../../main.inc.php'; endif;
-if (! $res && file_exists("../../../main.inc.php")): $res=@include '../../../main.inc.php'; endif;
+if (! $res && file_exists("../main.inc.php")) : $res=@include '../main.inc.php'; 
+endif;
+if (! $res && file_exists("../../main.inc.php")) : $res=@include '../../main.inc.php'; 
+endif;
+if (! $res && file_exists("../../../main.inc.php")) : $res=@include '../../../main.inc.php'; 
+endif;
 
 // Protection if external user
-if ($user->socid > 0): accessforbidden(); endif;
+if ($user->socid > 0) : accessforbidden(); 
+endif;
 
 // Droits Budget
-if (!$user->rights->doliedition->edition->write): accessforbidden(); endif;
+if (!$user->rights->doliedition->edition->write) : accessforbidden(); 
+endif;
 
 // ON CHARGE LES FICHIERS NECESSAIRES
 require_once DOL_DOCUMENT_ROOT.'/core/lib/admin.lib.php';
@@ -30,7 +34,7 @@ $error = 0;
 /*******************************************************************
 * ACTIONS
 ********************************************************************/
-if($action == 'action'):
+if($action == 'action') :
 endif;
 
 //
@@ -41,7 +45,7 @@ endif;
 $array_js = array();
 $array_css = array();
 
-llxHeader('',$langs->trans('doliEditionSetupPage'),'','','','',$array_js,$array_css); ?>
+llxHeader('', $langs->trans('doliEditionSetupPage'), '', '', '', '', $array_js, $array_css); ?>
 
 <div class="">
 </div>
