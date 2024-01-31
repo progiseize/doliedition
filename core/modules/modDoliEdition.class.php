@@ -71,7 +71,7 @@ class modDoliEdition extends DolibarrModules
 		$this->editor_url = 'https://progiseize.fr';
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated', 'experimental_deprecated' or a version string like 'x.y.z'
-		$this->version = '1.0.0';
+		$this->version = '1.0.1';
 		// Url to the file with your last numberversion of this module
 		$this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
 
@@ -118,7 +118,7 @@ class modDoliEdition extends DolibarrModules
 		$this->dirs = array();
 
 		// Config pages. Put here list of php page, stored into doliedition/admin directory, to use to setup module.
-		$this->config_page_url = 'setup.php@doliedition';
+		$this->config_page_url = '';
 
 		// Dependencies
 		// A condition to hide module
@@ -228,7 +228,7 @@ class modDoliEdition extends DolibarrModules
 
 		$edition_elements = array('propal','propaldet','commande','commandedet','facture','facturedet','supplier_proposal','supplier_proposaldet','commande_fournisseur','commande_fournisseurdet','facture_fourn','facture_fourn_det','expensereport');
 		foreach($edition_elements as $elementtype):
-			$extra_expensereport = $extrafields->addExtraField('edition_num','doliEdition','sellist','01','',$elementtype,0,0,'',array('options'=> array('doliedition:edition:edition::active=1 AND entity=$ENTITY$' =>'')),1,'',1,0,'','','doliedition@doliedition','$conf->doliedition->enabled');
+			$extra_expensereport = $extrafields->addExtraField('edition_num','doliEditionE','sellist','01','',$elementtype,0,0,'',array('options'=> array('doliedition:edition:edition::active=1 AND entity=$ENTITY$' =>'')),1,'',1,0,'','','doliedition@doliedition','$conf->doliedition->enabled');
 		endforeach;
 
 		// Permissions
