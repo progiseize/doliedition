@@ -1,0 +1,185 @@
+/* 
+ * Copyright (C) 2023 ProgiSeize <contact@progiseize.fr>
+ *
+ * This program and files/directory inner it is free software: you can 
+ * redistribute it and/or modify it under the terms of the 
+ * GNU Affero General Public License (AGPL) as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU AGPL for more details.
+ *
+ * You should have received a copy of the GNU AGPL
+ * along with this program.  If not, see <https://www.gnu.org/licenses/agpl-3.0.html>.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --colorprimary: var(--colorbackhmenu1);
+  --colorsecondary: #6c6aa8;
+  --colorgraylight: #e0e0e0;
+  --colorgraylight2: #ccc;
+  --colorgraylight3: #878787;
+  --colorgraylight4: #696969;
+  --colordanger: #fb2a52;
+  --colorwarning: #f88533;
+  --colorsuccess: #25a580;
+  --colorfillgray: var(--colorbackvmenu1);  
+  --colorfillgray2: #f6f6f6;
+  --colorfull: #fb2a52;
+  --colordanger_bg: #ffe6ea;
+  --colorwarning_bg: #ffeadb;
+  --colorsuccess_bg: #e3ffea;
+}
+
+/***************************************/
+/* DOL ADMIN */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+.doliedition {font-family:'Roboto',sans-serif !important;background: #fbfbfb;margin: -14px -36px -20px -40px;min-height: calc(100vh - 53px);padding: 24px 42px;box-sizing: border-box;}
+
+.doliedition .doliedition-top-message {background: var(--colorgraylight3);color: #fff;margin-bottom: 32px;padding: 16px;border-radius:8px;}
+.doliedition .doliedition-top-message span {font-weight: 500;}
+.doliedition .doliedition-top-message.msg-warning {background: var(--colorwarning_bg); color: var(--colorwarning); font-weight: 500;}
+.doliedition .doliedition-top-message.msg-error {background: var(--colordanger_bg); color: var(--colordanger); font-weight: 500;}
+
+
+.doliedition .doliedition-flex-wrapper {display: flex;gap: 24px;}
+.doliedition .doliedition-flex-wrapper.wrap {flex-wrap: wrap;gap: 12px;}
+.doliedition .doliedition-flex-wrapper.end {justify-content: flex-end;}
+.doliedition .doliedition-flex-wrapper .doliedition-card {flex: 1;}
+
+
+.doliedition .doliedition-flex-wrapper .doliedition-flextitle-withbutton {justify-content: space-between;align-items: flex-start;}
+.doliedition .doliedition-flex-wrapper .doliedition-flextitle-withbutton .doliedition-flextitle {flex: 1;}
+.doliedition .doliedition-flex-wrapper .doliedition-flextitle-withbutton .doliedition-flexbutton {padding-left: 24px;padding-top: 4px;}
+.doliedition .doliedition-flex-wrapper .doliedition-flextitle-withbutton .doliedition-flexbutton i {color: var(--colorgraylight3);font-size: 1.5em;cursor: pointer;}
+.doliedition .doliedition-flex-wrapper .doliedition-flextitle-withbutton .doliedition-flexbutton i:hover {color: var(--colorsecondary);}
+
+.doliedition .doliedition-form input {font-family:'Roboto',sans-serif !important;}
+.doliedition .doliedition-form textarea {font-family:'Roboto',sans-serif !important;}
+.doliedition .doliedition-form input.coloris {width: 64px;}
+.doliedition .doliedition-form .clr-field button {width: 100%;height: 100%;border-radius: 5px;}
+.doliedition .doliedition-form .doliedition-form-buttons {text-align: right;margin-top: 24px;}
+.doliedition .doliedition-form .doliedition-form-buttons input[type=submit] {background: var(--colorsecondary);color:#fff;font-weight: 500;padding: 6px 12px;font-family:'Roboto',sans-serif !important;cursor: pointer;}
+.doliedition .doliedition-form .doliedition-form-buttons input[type=submit]:hover {background: #000;}
+.doliedition .doliedition-form .doliedition-form-buttons a {background: var(--colorsecondary);color:#fff;font-weight: 500;padding: 6px 12px;font-family:'Roboto',sans-serif !important;cursor: pointer;}
+.doliedition .doliedition-form .doliedition-form-buttons a:hover {background: #000;text-decoration: none;}
+
+/***************************/
+/***************************/
+
+.doliedition .doliedition-flex-wrapper .doliedition-col-menu {flex: 1;}
+.doliedition .doliedition-flex-wrapper .doliedition-col-menu .doliedition-card {margin-bottom: 24px;}
+.doliedition .doliedition-flex-wrapper .doliedition-col-params {flex: 3;}
+
+
+.doliedition .doliedition-card {background: #fff;border-radius:8px;padding: 24px;box-shadow: rgba(17, 12, 46, 0.05) 0px 0px 16px 0px;margin: 0;}
+.doliedition .doliedition-card.card-active {}
+.doliedition .card-flex {display: flex;flex-wrap:wrap;justify-content: space-between;align-items: center;}
+
+.doliedition .doliedition-card.with-topmenu {}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu {margin: 0 -24px 24px -24px;border-bottom: 1px solid var(--colorgraylight);box-sizing: border-box;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul {margin: 0;padding: 0 24px;list-style: none;display: flex;gap: 12px;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li {padding: 0 8px 16px 8px;font-weight: 500;color: var(--colorgraylight3);box-sizing: border-box;position: relative;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li a {color: var(--colorgraylight3);text-decoration: none;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li a:hover {color: #000;text-decoration: none;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li a i {color: var(--colorgraylight2);padding-right: 6px;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li a:hover i {color: var(--colorsecondary);}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active a {color: #000;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active a:hover {color: #000;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active a i {color: var(--colorsecondary);}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active:after {content: "";display: block;width: 100%;height: 1px;background: var(--colorsecondary);position: absolute;top: 100%;left: 0}
+
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active {color: #000;}
+.doliedition .doliedition-card.with-topmenu .doliedition-card-topmenu ul li.active i {color: var(--colorsecondary);}
+
+/**/
+
+/**/
+
+.doliedition .doliedition-card .doliedition-card-icon.icolor-danger {color: var(--colordanger) !important;}
+
+.doliedition .doliedition-card .doliedition-card-title {font-weight: 700;font-size: 1.15em;}
+.doliedition .doliedition-card .doliedition-card-title a {color: var(--colorgraylight4);}
+.doliedition .doliedition-card .doliedition-card-title a:hover {color: var(--colorsecondary);text-decoration: none;}
+
+.doliedition .doliedition-card .doliedition-card-icon {padding-right: 24px;color: var(--colorgraylight2);font-size: 1.6em;}
+
+.doliedition .doliedition-card .doliedition-card-content {flex: 1;}
+.doliedition .doliedition-card .doliedition-card-content .doliedition-card-desc {color: var(--colorgraylight3);}
+.doliedition .doliedition-card .doliedition-card-right {padding-left: 24px;}
+
+.doliedition .doliedition-card.card-active .doliedition-card-icon i {color: var(--colorsecondary);}
+.doliedition .doliedition-card.card-active .doliedition-card-icon.icolor-danger i {color: var(--colordanger);}
+.doliedition .doliedition-card.card-active .doliedition-card-title a {color: #000;}
+.doliedition .doliedition-card.card-active .doliedition-card-title a:hover {color: #000;}
+
+.doliedition .doliedition-card .doliedition-params-title {font-weight: 700;font-size: 1.3em;}
+.doliedition .doliedition-card .doliedition-params-title i {color: var(--colorsecondary);}
+.doliedition .doliedition-card .doliedition-params-desc {margin-top: 3px;}
+
+.doliedition .doliedition-card .doliedition-table-simple {width: 100%;border-collapse: collapse;}
+.doliedition .doliedition-card .doliedition-table-simple tr {}
+.doliedition .doliedition-card .doliedition-table-simple td {border-bottom: 1px dashed #eee;padding: 12px 0;}
+.doliedition .doliedition-card .doliedition-table-simple td.doliedition-table-subtitle {color:var(--colorgraylight3);font-weight: 500;border-bottom: none;}
+.doliedition .doliedition-card .doliedition-table-simple td.doliedition-table-subtitle i {color:var(--colorsecondary);}
+.doliedition .doliedition-card .doliedition-table-simple td .color-label {padding-right:5px;}
+
+.doliedition .doliedition-card .doliedition-table-simple tbody.params-for-template {display: none;}
+
+/**/
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table {margin-top: 8px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr th {color: var(--colorgraylight2);padding: 16px 20px;background: var(--colorfillgray2);text-align: left;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr th.right {text-align: right;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr th.center {text-align: center;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr th:first-child {padding-right: 4px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr th:last-child {padding-right: 8px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr td {padding: 16px 20px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr:nth-child(odd) td {background: var(--colorfillgray);}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr td.smbold {font-weight: 500;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr td:first-child {padding-right: 4px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr .doledition-table-message {padding-right: 36px;padding-left: 4px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table tr td:last-child {padding-right: 8px;}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table .doledition-table-infos i {color: var(--colorsecondary);}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table .doledition-table-infos i:hover {color: var(--colorsecondary);}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table .doledition-table-infos-icon i {color: var(--colorgraylight2);}
+.doliedition .doliedition-card .doliedition-table-simple.doledition-table .doledition-table-infos-icon i:hover {color: var(--colorsecondary);}
+
+/**/
+.doliedition .doliedition-danger {color: var(--colordanger) !important;}
+.doliedition .coloredition-current {color: var(--colorwarning) !important;}
+.doliedition .coloredition-active {color: var(--colorgraylight2) !important;}
+.doliedition .coloredition-inactive {color: var(--colorgraylight) !important;}
+
+/**/
+@media only screen and (max-width: 1620px) {
+  .doliedition #loginplusadmin-content {flex-direction: column;}
+  .doliedition #loginplusadmin-content .doliedition-col-menu {display:flex;flex-direction: row;flex-wrap: wrap;gap: 24px;}
+  .doliedition #loginplusadmin-content .doliedition-col-menu .doliedition-card {min-width: 320px;margin-bottom: 0}
+}
+
+/**/
+.doliedition .doliedition-btn {padding: 8px 12px;background: #fff; border: 1px solid var(--colorprimary);box-sizing: border-box;border-radius: 4px;color: var(--colorprimary);text-decoration: none;text-transform: uppercase;font-weight: 500;font-size: 0.9em;font-family: 'Poppins', sans-serif;cursor: pointer;line-height: normal !important;}
+.doliedition .doliedition-btn:hover {background: var(--colorprimary); color: #fff;text-decoration: none;}
+.doliedition .doliedition-btn.btn-primary {border: 1px solid var(--colorprimary);color: var(--colorprimary);}
+.doliedition .doliedition-btn.btn-primary:hover {background: var(--colorprimary); color: #fff;}
+.doliedition .doliedition-btn.btn-secondary {border: 1px solid var(--colorsecondary);color: var(--colorsecondary);}
+.doliedition .doliedition-btn.btn-secondary:hover {background: var(--colorsecondary); color: #fff;}
+.doliedition .doliedition-btn.btn-warning {border: 1px solid var(--colorwarning);color: var(--colorwarning);}
+.doliedition .doliedition-btn.btn-warning:hover {background: var(--colorwarning); color: #fff;}
+.doliedition .doliedition-btn.btn-danger {border: 1px solid var(--colordanger);color: var(--colordanger);}
+.doliedition .doliedition-btn.btn-danger:hover {background: var(--colordanger); color: #fff;}
+.doliedition .doliedition-btn.btn-success {border: 1px solid var(--colorsuccess);color: var(--colorsuccess);}
+.doliedition .doliedition-btn.btn-success:hover {background: var(--colorsuccess); color: #fff;}
+.doliedition .doliedition-btn.btn-sm {padding: 4px 8px;font-size: 0.85em;}
+
+.doliedition .doliedition-editlink {color: var(--colorgraylight2) !important;}
+.doliedition .doliedition-editlink:hover {color: var(--colorsecondary) !important;}
+
+.doliedition h1 {font-size: 1.6em;margin-bottom: 12px;}
+.doliedition h1 i {color: var(--colorsecondary);margin-right: 5px; }

@@ -18,8 +18,6 @@ if (!$user->rights->doliedition->edition->read) : accessforbidden();
 endif;
 
 // ON CHARGE LES FICHIERS NECESSAIRES
-
-dol_include_once('/progilib/class/progiform.class.php');
 dol_include_once('/doliedition/class/doliedition.class.php');
 
 // ON CHARGE LA LANGUE DU MODULE
@@ -31,7 +29,7 @@ $langs->load("doliedition@doliedition");
 $action = GETPOST('action', 'alphanohtml');
 $editionid = GETPOST('editionid', 'int');
 
-$magicform = new ProgiForm($db);
+$form = new Form($db);
 
 $edition_static = new DoliEdition($db);
 $list_editions = $edition_static->fetch_all();
@@ -41,39 +39,40 @@ $last_edition = intval($last_edition_obj->edition);
 $last_numero = intval($last_edition_obj->numero);
 $error = 0;
 
+$view = ($action=='addedition')?$action:'';
+
 /*******************************************************************
 * ACTIONS
 ********************************************************************/
 
 switch ($action):
 
-    //
 case 'add_edition_confirm':
 
     if(GETPOST('token') == $_SESSION['token']) :
 
         if(!GETPOST('new-number', 'int')) : 
-            $error++; array_push($magicform->error_fields, 'new-number');
+            $error++;
             setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('Numero')), '', 'errors');
         endif;
 
         if(!GETPOST('new-edition', 'alphanohtml')) : 
-            $error++; array_push($magicform->error_fields, 'new-edition');
+            $error++;
             setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('doliEditionE')), '', 'errors');
         endif;
 
         if(!GETPOST('new-datestart', 'alphanohtml')) : 
-            $error++; array_push($magicform->error_fields, 'new-datestart');
+            $error++;
             setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('DateStart')), '', 'errors');
         endif;
 
         if(!GETPOST('new-datestop', 'alphanohtml')) : 
-            $error++; array_push($magicform->error_fields, 'new-datestop');
+            $error++;
             setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('DateEnd')), '', 'errors');
         endif;
 
         if(GETPOST('new-datestart', 'alphanohtml') > GETPOST('new-datestop', 'alphanohtml')) :
-            $error++; array_push($magicform->error_fields, 'new-datestart'); array_push($magicform->error_fields, 'new-datestop');
+            $error++;
             setEventMessages($langs->transnoentities('doliEditionDateReversed'), '', 'errors');
         endif;
 
@@ -97,7 +96,7 @@ case 'add_edition_confirm':
                 else:
                     setEventMessages($langs->trans('doliEditionErrorOccurred'), '', 'errors');
                 endif;
-            else: $action = 'add_edition';
+            else: $action = 'addedition';
             endif;
 
 
@@ -190,27 +189,27 @@ case 'editeditionconfirm':
     $editnote = GETPOST('editnote', 'alphanohtml');
 
     if(empty($editnumber)) :
-        $error++; array_push($magicform->error_fields, 'edit-number');
+        $error++;
         setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('Numero')), '', 'errors');
     endif;
 
     if(empty($editedition)) :
-        $error++; array_push($magicform->error_fields, 'edit-edition');
+        $error++;
         setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('doliEditionE')), '', 'errors');
     endif;
 
     if(empty($editdatestart)) :
-        $error++; array_push($magicform->error_fields, 'edit-datestart');
+        $error++;
         setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('DateStart')), '', 'errors');
     endif;
 
     if(empty($editdatestop)) : 
-        $error++; array_push($magicform->error_fields, 'edit-datestop');
+        $error++;
         setEventMessages($langs->transnoentities('ErrorFieldRequired', $langs->transnoentities('DateEnd')), '', 'errors');
     endif;
 
     if($editdatestart > $editdatestop) :
-        $error++; array_push($magicform->error_fields, 'edit-datestart'); array_push($magicform->error_fields, 'edit-datestop');
+        $error++;
         setEventMessages($langs->transnoentities('doliEditionDateReversed'), '', 'errors');
     endif;
 
@@ -251,7 +250,7 @@ endif;
 * VIEW
 ****************************************************/
 $array_js = array();
-$array_css = array('progilib/assets/css/dolpgs.css');
+$array_css = array('doliedition/css/doliedition.css');
 
 llxHeader('', $langs->trans('doliEditionManage'), '', '', '', '', $array_js, $array_css); 
 
@@ -264,7 +263,7 @@ if($action == 'seteditioncurrent') :
     endif;
     if(!$error) : 
 
-        echo $magicform->form->formconfirm(
+        echo $form->formconfirm(
             $_SERVER["PHP_SELF"].'?editionid='.$editionid,
             $langs->trans('Confirm'),
             $langs->trans('doliEditionSetCurrentConfirm', $list_editions[$editionid]->edition),
@@ -279,7 +278,7 @@ elseif($action == 'deleteedition' && $user->rights->doliedition->edition->delete
     endif;
     if(!$error) :
         $editionid = GETPOST('editionid', 'int');
-        echo $magicform->form->formconfirm(
+        echo $form->formconfirm(
             $_SERVER["PHP_SELF"].'?editionid='.$editionid,
             $langs->trans('Confirm'),
             $langs->trans('doliEditionDeleteConfirm', $list_editions[$editionid]->edition),
@@ -287,147 +286,158 @@ elseif($action == 'deleteedition' && $user->rights->doliedition->edition->delete
             array(), '', 1, 250, 520, 0
         );
     endif;
-
-
 endif; ?>
 
-<div class="dolpgs-main-wrapper doliedition">
+<div class="doliedition">
 
     <h1><i class="far fa-calendar-alt"></i> <?php echo $langs->transnoentities('doliEditionManage'); ?></h1>
-    <div class="justify opacitymedium" style="margin-bottom: 24px"><?php echo img_info().' '.$langs->trans("doliEditionManageDesc"); ?></div>
+    <div class="justify opacitymedium" style="margin: 0 0 24px 0;"><?php echo img_info().' '.$langs->trans("doliEditionManageDesc"); ?></div>
 
-    <?php if($action == 'add_edition') : ?>
-    <form enctype="multipart/form-data" action="<?php print $_SERVER["PHP_SELF"]; ?>" method="post" id="">
-
-        <?php 
-            echo $magicform->inputHidden('action', 'add_edition_confirm');
-            echo $magicform->inputHidden('token', newtoken()); 
-        if(empty($list_editions)) : 
-            echo $magicform->inputHidden('setcurrent', '1'); 
-        endif;
-        ?>
-
-        <h3 class="dolpgs-table-title"><?php echo $langs->trans('doliEditionAdd'); ?></h3>
-        <table class="dolpgs-table">
-            <tbody>
-
-                <tr class="dolpgs-thead">
-                    <th><?php echo $langs->trans('doliEditionNumberShort'); ?></th>
-                    <th><?php echo $langs->trans('doliEditionE'); ?></th>
-                    <th><?php echo $langs->trans('DateStart'); ?></th>
-                    <th><?php echo $langs->trans('DateEnd'); ?></th>                    
-                    <th><?php echo $langs->trans('Note'); ?></th>
-                    <th class="right"></th>
-                </tr>
-                
-                <tr class="dolpgs-tbody">
-                    <td><?php echo $magicform->inputNumber('new-number', $last_numero+1, 1); ?></td> 
-                    <td><?php echo $magicform->inputText('new-edition'); ?></td>
-                    <td><?php echo $magicform->inputDate('new-datestart'); ?></td>               
-                    <td><?php echo $magicform->inputDate('new-datestop'); ?></td>                                       
-                    <td><?php echo $magicform->inputText('new-note', '', 'minwidth300'); ?></td>
-                    <td class="right">
-                        <?php echo $magicform->inputSubmit('', '', $_SERVER['PHP_SELF'], 'dolpgs-btn btn-sm btn-secondary'); ?>
-                    </td>
-                </tr>
-
-
-            </tbody>
-        </table>
-    </form>
-    <?php endif; ?>
-
-    <div class="dolpgs-table-title-flexwrapper">
-        <h3 class="dolpgs-table-title"><?php echo $langs->trans('doliEditionList'); ?></h3>
-        <?php if($user->rights->doliedition->edition->write) : ?>
-            <a href="<?php echo $_SERVER['PHP_SELF'].'?action=add_edition&token='.newtoken(); ?>" class="dolpgs-btn btn-sm btn-primary">Ajouter</a>
-        <?php endif; ?>
-    </div>
     <?php if(!$is_active_edition) : ?>
-        <p class="dolpgs-color-danger dolpgs-font-medium"><i class="fas fa-exclamation-triangle"></i> <?php echo $langs->transnoentities('doliEditionNeeded'); ?></p>
+        <div class="doliedition-top-message msg-warning">
+            <i class="fas fa-exclamation-triangle"></i> <?php echo $langs->transnoentities('doliEditionNeeded'); ?>
+        </div>
     <?php endif; ?>
 
-    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <div class="doliedition-card with-topmenu">
 
-        <?php echo $magicform->inputHidden('action', 'editeditionconfirm'); ?>
-        <?php echo $magicform->inputHidden('token', newtoken()); ?>
-
-        <table class="dolpgs-table">
-            <tbody>
-                <tr class="dolpgs-thead noborderside">
-                    <th class="center nowrap width25"><?php echo $langs->trans('doliEditionNumberShort'); ?></th>
-                    <th><?php echo $langs->trans('doliEditionE'); ?></th>
-                    <th><?php echo $langs->trans('DateStart'); ?></th>
-                    <th><?php echo $langs->trans('DateEnd'); ?></th>                
-                    <th><?php echo $langs->trans('Note'); ?></th>
-                    <th class="center nowrap width50"><?php echo $langs->trans('Active'); ?></th>
-                    <th class="center nowrap width50"><?php echo $langs->trans('doliEditionCurrent'); ?></th>
-                    <th class="center nowrap width25"></th>
-                </tr>
-                <?php foreach($list_editions as $edition): ?>
-
-                    <?php if($action == 'editedition' && $editionid == $edition->id) : ?>
-                        <tr class="dolpgs-tbody">
-                            <td class="center nowrap width25">
-                                <?php echo $magicform->inputHidden('editionid', $edition->id); ?>
-                                <?php echo $magicform->inputNumber('editnumber', $edition->numero, 1, '', 1, 'width50'); ?>
-                            </td>
-                            <td class="dolpgs-font-medium"><?php echo $magicform->inputText('editedition', $edition->edition); ?></td>
-                            <td><?php echo $magicform->inputDate('editdatestart', $edition->date_debut->format('Y-m-d')); ?></td>
-                            <td><?php echo $magicform->inputDate('editdatestop', $edition->date_fin->format('Y-m-d')); ?></td>
-                            <td class="maxwidth300"><?php echo $magicform->inputText('editnote', $edition->note, 'minwidth300'); ?></td>
-                            <td class="center nowrap width50"></td>
-                            <td class="center nowrap width50"></td>
-                            <td class="center nowrap width25">
-                                <?php echo $magicform->inputSubmit('', '', $_SERVER['PHP_SELF'], 'dolpgs-btn btn-sm btn-secondary'); ?>
-                            </td>
-                        </tr>
-
-                    <?php else: ?>
-                    
-                        <tr class="dolpgs-tbody">
-                            <td class="center nowrap width25"><?php echo $edition->numero; ?></td>
-                            <td class="dolpgs-font-medium">                    
-                                <?php 
-                                if($edition->current) : $color_edition = 'dolpgs-color-success';
-                                elseif($edition->active && !$edition->current) : $color_edition = 'dolpgs-color-warning';
-                                else: $color_edition = 'dolpgs-color-gray2';
-                                endif; ?>
-                                <i class="fas fa-circle <?php echo $color_edition; ?>" style="font-size:6px; vertical-align: middle !important;margin-right: 3px;"></i>
-                                <?php echo $edition->edition; ?>                        
-                            </td>
-                            <td><?php echo $edition->date_debut->format('d/m/Y'); ?></td>
-                            <td><?php echo $edition->date_fin->format('d/m/Y'); ?></td>
-                            
-                            <td class="maxwidth300"><?php echo $edition->note; ?></td>
-                            <td class="center nowrap width50">
-                                <?php if($edition->active) : echo '<a class="reposition" href="'.$_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditioninactive&token='.newtoken().'">'.img_picto($langs->trans("Activated"), 'switch_on').'</a>';
-                                else: echo '<a class="reposition" href="'.$_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditionactive&token='.newtoken().'">'.img_picto($langs->trans("Disabled"), 'switch_off').'</a>'; 
-                                endif; ?>
-                            </td>
-                            <td class="center nowrap width50">
-                                <?php if($edition->active) : ?>
-                                    <?php if($edition->current) : ?>
-                                        <i class="fas fa-star dolpgs-color-warning"></i>
-                                    <?php else: ?>
-                                        <a href="<?php echo $_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditioncurrent&token='.newtoken(); ?>"><i class="fas fa-star dolpgs-color-gray2"></i></a>
-                                    <?php endif; ?>
-                                <?php endif; ?>
-                            </td>
-                            <td class="center nowrap width25">
-                                <?php if($user->rights->doliedition->edition->write) : ?>
-                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?editionid='.$edition->id.'&action=editedition&token='.newtoken(); ?>" class="dolpgs-editlink" style="margin:0 3px;"><i class="fas fa-pencil-alt"></i></a>
-                                <?php endif; ?>
-                                <?php if($user->rights->doliedition->edition->delete) : ?>
-                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?editionid='.$edition->id.'&action=deleteedition&token='.newtoken(); ?>" class="dolpgs-editlink" style="margin:0 3px;"><i class="fas fa-trash-alt"></i></a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+        <?php // TOP MENU
+        $loginmenu = array();
+        $loginmenu[] = array('action' => '', 'icon' => 'fas fa-list','title' => $langs->trans('doliEditionList'));
+        if($user->rights->doliedition->edition->write) :
+            $loginmenu[] = array('action' => 'addedition', 'icon' => 'fas fa-plus-circle','title' => $langs->trans('Add'));
+        endif; ?>
+        <nav class="doliedition-card-topmenu">
+            <ul>
+                <?php foreach ($loginmenu as $menukey => $menudet): ?>
+                    <li class="<?php echo ($view == $menudet['action'])?'active':''; ?>">
+                        <?php $morelink = (!empty($menudet['action']))?'?action='.$menudet['action'].'&token='.newToken():''; ?>
+                        <a href="<?php echo $_SERVER['PHP_SELF'].$morelink; ?>">
+                            <i class="<?php echo $menudet['icon']; ?>"></i> <?php echo $menudet['title']; ?>
+                        </a>
+                    </li>
                 <?php endforeach; ?>
-            </tbody>
-        </table>
-    </form>
+            </ul>
+        </nav>
+
+        <div class="doliedition-params-title"><?php echo $langs->trans('doliEditionList'); ?></div>
+        <div class="doliedition-card-content paddingtop">
+            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="doliedition-form">
+
+                <?php if($action == 'addedition'): $nextaction = 'add_edition_confirm';
+                else: $nextaction = 'editeditionconfirm'; endif; ?>
+                <input type="hidden" name="action" value="<?php echo $nextaction; ?>">
+                <input type="hidden" name="token" value="<?php echo newtoken(); ?>">
+
+                <table class="doliedition-table-simple doledition-table">
+                    <tbody>
+                        <tr class="">
+                            <th class="center nowrap width25"></th>
+                            <th><?php echo $langs->trans('doliEditionE'); ?></th>  
+                            <th><?php echo $langs->trans('DateStart'); ?></th>
+                            <th><?php echo $langs->trans('DateEnd'); ?></th>                
+                            <th><?php echo $langs->trans('Note'); ?></th>
+                            <th class="right nowrap width25"><?php echo $langs->trans('doliEditionNumberShort'); ?></th>
+                            <th class="center nowrap width50"><?php echo $langs->trans('Active'); ?></th>                            
+                            <th class="right nowrap width25"></th>
+                        </tr>
+                        <?php
+                        if($action == 'addedition'): ?>
+                        <tr>
+                            <td class="center nowrap width25"></td>
+                            <td class="width100"><input type="text" name="new-edition" class="maxwidth150" value="<?php echo GETPOST('new-edition')?:''; ?>"></td>
+                            <td class="width150"><input type="date" name="new-datestart" id="new-datestart" value="<?php echo GETPOST('new-datestart')?:''; ?>" class=""></td>
+                            <td class="width150"><input type="date" name="new-datestop" id="new-datestop" value="<?php echo GETPOST('new-datestop')?:''; ?>" class=""></td>
+                            <td><input type="text" name="new-note" class="minwidth300" value="<?php echo GETPOST('new-note')?:''; ?>"></td>
+                            <td class="right nowrap width25"><input type="number" name="new-number" value="<?php echo $last_numero + 1; ?>" min="1" step="1" class="maxwidth75"></td>
+                            <td class="center nowrap width50"></td>
+                            <td class="nowrap right width25">
+                                <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="doliedition-btn btn-danger btn-sm" ><?php echo $langs->trans('Cancel'); ?></a>
+                                <input type="submit" class="doliedition-btn btn-sm btn-secondary">
+                            </td>
+                        </tr>
+                        <?php endif;
+                        ?>
+                        <?php foreach($list_editions as $edition): ?>
+
+                            <?php if($action == 'editedition' && $editionid == $edition->id) : ?>
+                                <tr class="">
+                                    <td class="center nowrap width25"></td>
+                                    
+                                    <td class="">
+                                        <input type="text" name="editedition" class="minwidth150" value="<?php echo $edition->edition; ?>">
+                                    </td>
+                                    <td>
+                                        <input type="date" name="editdatestart" id="editdatestart" value="<?php echo $edition->date_debut->format('Y-m-d'); ?>" class="">
+                                    </td>
+                                    <td>
+                                        <input type="date" name="editdatestop" id="editdatestop" value="<?php echo $edition->date_fin->format('Y-m-d'); ?>" class="">
+                                    </td>
+                                    <td class="">
+                                        <input type="text" name="editnote" class="minwidth300" value="<?php echo $edition->note; ?>">
+                                    </td>
+                                    <td class="right nowrap width25">
+                                        <input type="hidden" name="editionid" value="<?php echo $edition->id; ?>">
+                                        <input type="number" name="editnumber" value="<?php echo $edition->numero; ?>" min="1" class="maxwidth75" step="1">
+                                    </td>
+                                    <td class="center nowrap width50"></td>
+                                    <td class="center nowrap width25">
+                                        <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="doliedition-btn btn-danger btn-sm" ><?php echo $langs->trans('Cancel'); ?></a>
+                                        <input type="submit" class="doliedition-btn btn-sm btn-secondary">
+                                    </td>
+                                </tr>
+
+                            <?php else: ?>
+                            
+                                <tr class="">
+                                    
+                                    <td class="center nowrap width25">
+                                        <?php 
+                                        if($edition->current) : $color_edition = 'coloredition-current';
+                                        elseif($edition->active && !$edition->current) : $color_edition = 'coloredition-active';
+                                        else: $color_edition = 'coloredition-inactive';
+                                        endif;                                         
+                                        $iconedition = '<i class="fas fa-star paddingright '.$color_edition.'" style="font-size:0.95em; vertical-align: middle !important;"></i>';
+
+                                        if($edition->active && !$edition->current):
+                                            echo '<a href="'.$_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditioncurrent&token='.newtoken().'">'.$iconedition.'</a>';
+                                        elseif($edition->active): echo $iconedition;
+                                        endif; ?>
+                                    </td>
+                                    <td class="smbold width100"> <?php echo $edition->edition; ?></td>                                    
+                                    <td class="width150"><?php echo $edition->date_debut->format('d/m/Y'); ?></td>
+                                    <td class="width150"><?php echo $edition->date_fin->format('d/m/Y'); ?></td>
+                                    
+                                    <td class=""><?php echo $edition->note; ?></td>
+                                    <td class="right nowrap smbold width25"><?php echo $edition->numero; ?></td>
+                                    <td class="center nowrap width50">
+                                        <?php if($edition->active) : echo '<a class="reposition" href="'.$_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditioninactive&token='.newtoken().'">'.img_picto($langs->trans("Activated"), 'switch_on').'</a>';
+                                        else: echo '<a class="reposition" href="'.$_SERVER["PHP_SELF"].'?editionid='.$edition->id.'&action=seteditionactive&token='.newtoken().'">'.img_picto($langs->trans("Disabled"), 'switch_off').'</a>'; 
+                                        endif; ?>
+                                    </td>
+                                    
+                                    <td class="right nowrap width25">
+                                        <?php if($user->rights->doliedition->edition->write) : ?>
+                                            <a href="<?php echo $_SERVER['PHP_SELF'].'?editionid='.$edition->id.'&action=editedition&token='.newtoken(); ?>" class="doliedition-editlink" style="margin:0 3px;"><i class="fas fa-pencil-alt"></i></a>
+                                        <?php endif; ?>
+                                        <?php if($user->rights->doliedition->edition->delete) : ?>
+                                            <a href="<?php echo $_SERVER['PHP_SELF'].'?editionid='.$edition->id.'&action=deleteedition&token='.newtoken(); ?>" class="doliedition-editlink" style="margin:0 3px;"><i class="fas fa-trash-alt"></i></a>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        
+    </div>
+
+    
+    
+
+    
     
 </div>
 

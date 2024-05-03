@@ -1,6 +1,7 @@
-# DoliEdition
+## DoliEdition
 
-***
+### 1.0.3
+* MAJ - Remove Progilib dependency
 
 ### 1.0.2
 * FIX - Check with PHPCS
