@@ -1,5 +1,10 @@
 ## DoliEdition
 
+### 1.0.4
+* NEW : Extrafield on Actioncomm
+* MAJ : Langs and module description
+* Remove old langs files
+
 ### 1.0.3
 * MAJ - Remove Progilib dependency
 

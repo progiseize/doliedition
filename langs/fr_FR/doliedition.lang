@@ -1,4 +1,5 @@
 doliEditionModuleDescription=Gestion d'objets par éditions/saisons dans Dolibarr
+doliEditionModuleDescriptionLong=DoliEdition ajoute automatiquement les champs "Edition" à tous les objets et lignes d'objets de Dolibarr. <br>Il vous permet de gérer facilement les éditions et les saisons, offrant ainsi une solution pratique pour organiser et suivre les informations liées à ces aspects dans votre système Dolibarr.
 doliEditionManage=Gestion des éditions
 doliEditionManageDesc=Gestion des éditions liées à votre entité
 doliEditionNumberShort=N°

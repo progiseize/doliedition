@@ -64,14 +64,14 @@ class modDoliEdition extends DolibarrModules
         // Module description
         $this->description = "doliEditionModuleDescription";
         // Used only if file README.md and README-LL.md not found.
-        $this->descriptionlong = "doliEditionModuleDescription";
+        $this->descriptionlong = "doliEditionModuleDescriptionLong";
 
         // Author
         $this->editor_name = 'Progiseize';
         $this->editor_url = 'https://progiseize.fr';
 
         // Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated', 'experimental_deprecated' or a version string like 'x.y.z'
-        $this->version = '1.0.3';
+        $this->version = '1.0.4';
         // Url to the file with your last numberversion of this module
         $this->url_last_version = "https://progiseize.fr/modules_info/lastversion.php?module=".$this->numero;
 
@@ -226,7 +226,7 @@ class modDoliEdition extends DolibarrModules
         include_once DOL_DOCUMENT_ROOT.'/core/class/extrafields.class.php';
         $extrafields = new ExtraFields($this->db);
 
-        $edition_elements = array('propal','propaldet','commande','commandedet','facture','facturedet','supplier_proposal','supplier_proposaldet','commande_fournisseur','commande_fournisseurdet','facture_fourn','facture_fourn_det','expensereport');
+        $edition_elements = array('propal','propaldet','commande','commandedet','facture','facturedet','supplier_proposal','supplier_proposaldet','commande_fournisseur','commande_fournisseurdet','facture_fourn','facture_fourn_det','expensereport','actioncomm');
         foreach($edition_elements as $elementtype):
             $extra_expensereport = $extrafields->addExtraField('edition_num', 'doliEditionE', 'sellist', '01', '', $elementtype, 0, 0, '', array('options'=> array('doliedition:edition:edition::active=1 AND entity=$ENTITY$' =>'')), 1, '', 1, 0, '', '', 'doliedition@doliedition', '$conf->doliedition->enabled');
         endforeach;
